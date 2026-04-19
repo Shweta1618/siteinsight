@@ -168,9 +168,10 @@ DETECTION ENGINE RESULTS ({len(detections)} flags):
 ACTIVITIES BEHIND PLAN ({len(behind_acts)}):
 """
     for a in behind_acts:
-        prompt += (f"  {a['act_id']} · {a['activity']} · "
+        prompt += (f"  {a.get('phase','')} · {a['activity']} · "
                    f"Variance: {a.get('variance_pct',0)*100:.1f}% · "
-                   f"Reason: {a.get('delay_reason','')}\n")
+                   f"Reason: {a.get('delay_reason','')} · "
+                   f"Responsible: {a.get('responsible_person','—')}\n")
 
     if dq_flags:
         prompt += f"\nDATA QUALITY FLAGS ({len(dq_flags)}):\n"
