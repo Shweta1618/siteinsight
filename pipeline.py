@@ -41,7 +41,7 @@ GROQ_API_KEY = os.environ["GROQ_API_KEY"]
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 groq_client      = Groq(api_key=GROQ_API_KEY)
 
-GROQ_MODEL = "llama-3.3-70b-versatile"   # fast + free tier friendly
+GROQ_MODEL = "llama3-8b-8192"   # fast + free tier friendly
 
 # ── Detection Engine ─────────────────────────────────────────
 
@@ -221,6 +221,12 @@ def call_groq(prompt: str) -> dict:
             "key_risks":         "Could not parse structured response.",
             "recommendations":   "Review raw Groq output.",
         }
+
+    # Ensure key_risks and recommendations are stored as clean strings
+    if isinstance(parsed.get("key_risks"), list):
+        parsed["key_risks"] = json.dumps(parsed["key_risks"])
+    if isinstance(parsed.get("recommendations"), list):
+        parsed["recommendations"] = json.dumps(parsed["recommendations"])
 
     return {
         "parsed":            parsed,
