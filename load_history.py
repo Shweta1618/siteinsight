@@ -28,22 +28,29 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ── Column map: Excel header → DB field ─────────────────────
 COL_MAP = {
-    "Act\nID":                "act_id",
-    "Phase":                  "phase",
-    "Activity":               "activity",
-    "Unit":                   "unit",
-    "Total\nScope":           "total_scope",
-    "This Wk\nQty":          "this_wk_qty",
-    "Cum.\nActual Qty":       "cum_actual_qty",
-    "Cum.\nActual %":         "cum_actual_pct",
-    "★ Cum.\nPlanned %":     "cum_planned_pct",
-    "Variance\n(%)":          "variance_pct",
-    "Wks\nSlip":              "weeks_slip",
-    "★ Delay\nReason":       "delay_reason",
-    "Responsible Person":    "responsible_person",
-    "★ Critical\nPath":      "is_critical_path",
-    "Baseline\nVersion":      "baseline_version",
-    "Remarks / Next Week Plan": "remarks",
+    "Act\nID":                        "act_id",
+    "Phase":                           "phase",
+    "Activity":                        "activity",
+    "Unit":                            "unit",
+    "Total\nScope":                   "total_scope",
+    # Old format (Wk01-15)
+    "This Wk\nQty":                   "this_wk_achieved_qty",
+    "Cum.\nActual Qty":               "cum_actual_qty",
+    "Cum.\nActual %":                 "cum_actual_pct",
+    "★ Cum.\nPlanned %":             "cum_planned_pct",
+    # New format (Wk16+)
+    "This Wk\nPlanned\nQty":         "this_wk_planned_qty",
+    "This Wk\nAchieved\nQty":        "this_wk_achieved_qty",
+    "Cum.\nPlanned\n%":              "cum_planned_pct",
+    "Cum.\nActual\n%":               "cum_actual_pct",
+    # Common columns
+    "Variance\n(%)":                  "variance_pct",
+    "Wks\nSlip":                      "weeks_slip",
+    "★ Delay\nReason":               "delay_reason",
+    "Responsible Person":              "responsible_person",
+    "★ Critical\nPath":              "is_critical_path",
+    "Baseline\nVersion":              "baseline_version",
+    "Remarks / Next Week Plan":        "remarks",
 }
 
 
