@@ -1,0 +1,51 @@
+modules = ["python-3.11"]
+
+[agent]
+expertMode = true
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[nix]
+packages = ["lsof"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Webhook Server"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run app.py"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Webhook Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python webhook.py"
+waitForPort = 8080
+
+[workflows.workflow.metadata]
+outputType = "console"
