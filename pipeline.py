@@ -41,7 +41,7 @@ GROQ_API_KEY = os.environ["GROQ_API_KEY"]
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 groq_client      = Groq(api_key=GROQ_API_KEY)
 
-GROQ_MODEL = "llama3-8b-8192"   # fast + free tier friendly
+GROQ_MODEL = "llama-3.3-70b-versatile"   # fast + free tier friendly
 
 # ── Detection Engine ─────────────────────────────────────────
 
