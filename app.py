@@ -59,75 +59,116 @@ st.set_page_config(
     layout="wide",
 )
 
-# ── Custom CSS — white + amber theme ─────────────────────────
+# ── Custom CSS — construction theme ──────────────────────────
 st.markdown("""
 <style>
-  /* Main background white */
-  .stApp { background-color: #FFFFFF; }
-  .block-container { padding-top: 1.5rem; padding-bottom: 2rem; }
-
-  /* Sidebar */
-  [data-testid="stSidebar"] {
-    background-color: #1E2761;
+  /* Construction site background with dark overlay */
+  .stApp {
+    background-image:
+      linear-gradient(rgba(10,15,40,0.82), rgba(10,15,40,0.82)),
+      url("https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=80");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
   }
+  .block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    margin-top: 0.5rem;
+  }
+
+  /* Sidebar — deep navy */
+  [data-testid="stSidebar"] { background-color: #0F1735; }
   [data-testid="stSidebar"] * { color: #FFFFFF !important; }
   [data-testid="stSidebar"] .stSelectbox label { color: #A8C8F0 !important; }
 
   /* Headers */
-  h1 { color: #1E2761 !important; font-size: 1.6rem !important; }
+  h1 { color: #1E2761 !important; font-size: 1.6rem !important; font-weight: 800 !important; }
   h2 { color: #1E2761 !important; font-size: 1.25rem !important; }
-  h3 { color: #E87722 !important; font-size: 1.1rem !important; }
+  h3 { color: #E87722 !important; font-size: 1.1rem !important; font-weight: 700 !important; }
 
   /* Metric cards */
   [data-testid="metric-container"] {
-    background: #FFF8F0;
-    border: 1px solid #F9A825;
-    border-radius: 8px;
-    padding: 12px;
+    background: linear-gradient(135deg, #FFF8F0, #FFFDE7);
+    border: 1.5px solid #E87722;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(232,119,34,0.12);
   }
-  [data-testid="metric-container"] label { color: #666666 !important; font-size: 0.75rem !important; }
-  [data-testid="metric-container"] [data-testid="stMetricValue"] { color: #1E2761 !important; font-size: 1.6rem !important; font-weight: 700 !important; }
+  [data-testid="metric-container"] label {
+    color: #666666 !important;
+    font-size: 0.72rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  [data-testid="metric-container"] [data-testid="stMetricValue"] {
+    color: #1E2761 !important;
+    font-size: 1.7rem !important;
+    font-weight: 800 !important;
+  }
 
   /* Buttons */
   .stButton > button {
-    background-color: #E87722 !important;
+    background: linear-gradient(90deg, #E87722, #F9A825) !important;
     color: white !important;
     border: none !important;
-    border-radius: 6px !important;
-    font-weight: 600 !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px;
+    box-shadow: 0 3px 10px rgba(232,119,34,0.3);
   }
-  .stButton > button:hover { background-color: #C86010 !important; }
+  .stButton > button:hover {
+    background: linear-gradient(90deg, #C86010, #E87722) !important;
+    box-shadow: 0 4px 14px rgba(232,119,34,0.4);
+  }
 
   /* Divider */
-  hr { border-color: #F9A825 !important; opacity: 0.4; }
+  hr { border-color: #E87722 !important; opacity: 0.35; }
 
-  /* Info/warning/error boxes */
-  .stAlert { border-radius: 6px !important; }
+  /* Alerts */
+  .stAlert { border-radius: 8px !important; }
 
   /* Dataframe */
-  [data-testid="stDataFrame"] { border: 1px solid #F9A825; border-radius: 6px; }
+  [data-testid="stDataFrame"] {
+    border: 1.5px solid #E87722;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
 
   /* Expander */
   [data-testid="stExpander"] {
     border: 1px solid #E0E0E0 !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }
 
   /* Section header bar */
   .section-bar {
     background: linear-gradient(90deg, #1E2761, #E87722);
     color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 700;
     font-size: 0.9rem;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(30,39,97,0.2);
   }
 
-  /* Risk badge */
-  .badge-high   { background:#FFEBEE; color:#C62828; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; }
-  .badge-medium { background:#FFF8E1; color:#E65100; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; }
-  .badge-low    { background:#E8F5E9; color:#1B5E20; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; }
+  /* Risk badges */
+  .badge-high   { background:#FFEBEE; color:#C62828; padding:3px 10px; border-radius:5px; font-size:0.75rem; font-weight:700; border:1px solid #FFCDD2; }
+  .badge-medium { background:#FFF8E1; color:#E65100; padding:3px 10px; border-radius:5px; font-size:0.75rem; font-weight:700; border:1px solid #FFE082; }
+  .badge-low    { background:#E8F5E9; color:#1B5E20; padding:3px 10px; border-radius:5px; font-size:0.75rem; font-weight:700; border:1px solid #A5D6A7; }
+
+  /* Phase section card */
+  .phase-card {
+    background: #F8F9FF;
+    border-left: 4px solid #E87722;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -278,10 +319,18 @@ def compute_weekly_velocity(hdf, aid):
     return float(act_hist["cum_actual_pct"].diff().dropna().mean())
 
 def compute_projected_finish(current_pct, current_week, weekly_rate, total_weeks=80):
-    if weekly_rate <= 0:
+    try:
+        import math
+        if not weekly_rate or weekly_rate <= 0 or math.isnan(float(weekly_rate)):
+            return total_weeks
+        current_pct = 0.0 if (current_pct is None or math.isnan(float(current_pct))) else float(current_pct)
+        remaining   = max(0.0, 1.0 - current_pct)
+        result      = current_week + remaining / weekly_rate
+        if math.isnan(result) or math.isinf(result):
+            return total_weeks
+        return int(min(result, total_weeks * 2))
+    except Exception:
         return total_weeks
-    remaining = 1.0 - current_pct
-    return int(current_week + remaining / weekly_rate)
 
 def compute_trend_slope(hdf, aid, lookback=4):
     act_hist = hdf[hdf["act_id"] == aid].sort_values("week_number").tail(lookback)
@@ -484,7 +533,11 @@ if not risk_df.empty:
 project_name = header.get("project_name", "Horizon Commercial Tower")
 baseline_ver = header.get("baseline_version", "B1")
 contractor   = header.get("contractor", "—")
-report_date  = header.get("report_date", "—")
+
+# ── Calculate consistent week date from project start ─────────
+PROJECT_START = date(2025, 6, 2)  # Week 1 start — pre-monsoon 2025
+week_date     = PROJECT_START + pd.Timedelta(weeks=selected_week - 1)
+report_date   = week_date.strftime("%d %b %Y")
 
 # ── Page header ───────────────────────────────────────────────
 st.markdown(
@@ -754,21 +807,42 @@ if nav == "📋 Intelligence Report":
 
     st.divider()
 
-    # ── Site Photos — 4 curated images ───────────────────────
+    # ── Site Photos ───────────────────────────────────────────
     st.markdown("### 📸 Site Photos")
-    st.caption(
-        "Representative site photos by phase. "
-        "In production, actual photos are uploaded by the site engineer."
-    )
-    p1, p2, p3, p4 = st.columns(4)
-    cols = [p1, p2, p3, p4]
-    for i, photo in enumerate(SITE_PHOTOS):
-        with cols[i]:
-            st.image(
-                photo["url"],
-                caption=photo["caption"],
-                use_column_width=True,
-            )
+    photo_tab1, photo_tab2 = st.tabs(["📷 Upload Site Photos", "🖼 Representative Photos"])
+
+    with photo_tab1:
+        st.caption("Upload actual site photos — they will display below by phase.")
+        up1, up2 = st.columns(2)
+        uploaded_p1 = up1.file_uploader("Phase I photo", type=["jpg","jpeg","png"], key="up_p1")
+        uploaded_p2 = up2.file_uploader("Phase II photo", type=["jpg","jpeg","png"], key="up_p2")
+        up3, up4 = st.columns(2)
+        uploaded_p3 = up3.file_uploader("Phase III photo", type=["jpg","jpeg","png"], key="up_p3")
+        uploaded_p4 = up4.file_uploader("Site/General photo", type=["jpg","jpeg","png"], key="up_p4")
+
+        uploaded = [uploaded_p1, uploaded_p2, uploaded_p3, uploaded_p4]
+        captions  = ["Phase I", "Phase II", "Phase III", "Site"]
+        if any(uploaded):
+            st.divider()
+            ucols = st.columns(4)
+            for i, (up, cap) in enumerate(zip(uploaded, captions)):
+                if up:
+                    ucols[i].image(up, caption=cap, use_column_width=True)
+
+    with photo_tab2:
+        st.caption(
+            "Representative construction photos by phase. "
+            "In production, site engineer uploads actual photos via the Upload tab."
+        )
+        p1, p2, p3, p4 = st.columns(4)
+        cols = [p1, p2, p3, p4]
+        for i, photo in enumerate(SITE_PHOTOS):
+            with cols[i]:
+                st.image(
+                    photo["url"],
+                    caption=photo["caption"],
+                    use_column_width=True,
+                )
 
 
 # ════════════════════════════════════════════════════════════════
@@ -823,51 +897,90 @@ elif nav == "📝 Generate MOM":
                     (["next_week_targets"]  if inc_next     else [])
                 )
 
-                # Build activity context — plain language
-                behind_str = "None"
+                # Build phase-wise activity context
+                phases_data = {}
                 if not behind_acts.empty:
-                    rows_list = []
                     for _, r in behind_acts.iterrows():
-                        rp = r.get("responsible_person","—") or "—"
-                        rows_list.append(
-                            f"{r['phase']} · {r['activity']} · "
-                            f"Delay reason: {r['delay_reason']} · "
-                            f"Responsible: {rp}"
+                        phase = r.get("phase", "General") or "General"
+                        rp    = r.get("responsible_person", "—") or "—"
+                        is_cp = bool(r.get("is_critical_path", False))
+                        slip  = int(r.get("weeks_slip", 0) or 0)
+                        entry = (
+                            f"  Activity: {r['activity']}"
+                            f"{'  [CRITICAL PATH]' if is_cp else ''}"
+                            f"\n  Delay reason: {r.get('delay_reason','—')}"
+                            f"\n  Weeks slip: {slip}"
+                            f"\n  Responsible: {rp}"
                         )
-                    behind_str = "\n".join(rows_list)
+                        if phase not in phases_data:
+                            phases_data[phase] = []
+                        phases_data[phase].append(entry)
 
-                prompt = f"""You are a senior planning engineer writing formal Minutes of Meeting for a construction project review.
+                phase_context = ""
+                for phase, entries in sorted(phases_data.items()):
+                    phase_context += f"\n{phase}:\n"
+                    for entry in entries:
+                        phase_context += entry + "\n"
+
+                attendees_list = ', '.join(
+                    [a.strip() for a in attendees.split(chr(10)) if a.strip()])
+
+                prompt = f"""You are a senior planning engineer writing formal Minutes of Meeting for a construction project weekly review meeting.
 
 PROJECT: {project_name}
 WEEK: {selected_week} | DATE: {meeting_date} | CHAIRED BY: {meeting_chairperson}
 BASELINE: {baseline_ver} | CONTRACTOR: {contractor}
 
-DELAYED ACTIVITIES (for context only — do NOT repeat raw numbers in the MOM):
-{behind_str}
+DELAYED ACTIVITIES BY PHASE (source data — use this to write the MOM):
+{phase_context if phase_context else 'None'}
 
-RECURRING ISSUES:
+RECURRING ISSUES (flagged in previous weeks, still unresolved):
 {det_r3['detail'].tolist() if not det_r3.empty else 'None'}
 
-SUMMARY: {narrative.get('executive_summary','') if narrative else ''}
+PROJECT SUMMARY: {narrative.get('executive_summary','') if narrative else ''}
 
-Generate a professional MOM with sections: {', '.join(sections)}
+Generate a professional MOM using EXACTLY this structure:
 
-STRICT WRITING RULES:
-- Write in plain construction project language — no variance percentages, no slip numbers
-- Describe issues in plain words e.g. "Basement 1 Shuttering is significantly behind schedule due to monsoon rains"
-- Every action item must state: what needs to be done, who is responsible (use name), deadline is "by next site review meeting"
-- For recurring issues: state the issue, who is responsible, and consequence if unresolved
-- MOM should read like something a site engineer would actually write — clear, direct, professional
-- Use ALL CAPS for section headings only
-- No bullet points for the intro paragraphs — use them only for action items
-
-Start with:
 MINUTES OF MEETING
 Project: {project_name}
 Date: {meeting_date}
 Week: {selected_week}
 Chaired by: {meeting_chairperson}
-Attendees: {', '.join([a.strip() for a in attendees.split(chr(10)) if a.strip()])}
+Attendees: {attendees_list}
+
+PROJECT STATUS SUMMARY
+[2-3 sentences on overall project health in plain language — is the project recovering or worsening? Which phases are most critical?]
+
+PHASE-WISE REVIEW
+
+[For EACH phase that has delayed activities, write this block:]
+
+[PHASE NAME in CAPS — e.g. PHASE I]
+Status: [One sentence — overall phase health this week]
+[For each delayed activity in this phase:]
+- [Activity name]: [Plain description of delay and its impact on site operations]
+{'  *** CRITICAL PATH IMPACT: [Specific downstream activity affected and weeks impact on project completion] ***' if inc_critical else ''}
+  Responsible: [Name from data]
+  Action Required: [Specific, direct action — e.g. Arrange 2 additional shuttering gangs, Submit recovery programme, Mobilise excavator from Phase II]
+  Deadline: By next site review meeting
+
+{'RECURRING ISSUES' if inc_stale else ''}
+{'[For each recurring issue: state the problem clearly, who is accountable, and what happens to the project if it remains unresolved]' if inc_stale else ''}
+
+{'ACTION ITEMS' if inc_actions else ''}
+{'[Numbered list of all actions: 1. Action description | Responsible person | Deadline]' if inc_actions else ''}
+
+{'NEXT WEEK TARGETS' if inc_next else ''}
+{'[List the 3-5 must-achieve milestones before the next site review meeting, phase-wise]' if inc_next else ''}
+
+STRICT WRITING RULES:
+- Write in plain construction language — NO percentages, NO variance numbers, NO technical codes
+- Describe delays in human terms: "Basement shuttering is significantly behind schedule due to monsoon rains and labour shortage"
+- Every delayed activity MUST have: what is delayed, why, who is responsible, what specific action is needed
+- Critical path activities must have *** CRITICAL PATH IMPACT *** clearly marked within their phase block
+- Actions must be specific and direct — not "resolve delay" but "arrange additional shuttering gang from subcontractor by Thursday"
+- MOM must read like a real experienced planning engineer wrote it — professional, direct, actionable
+- ALL CAPS for main section headings only (PHASE I, RECURRING ISSUES, ACTION ITEMS etc.)
 """
                 mom_text = call_groq(prompt, max_tokens=2000)
 
@@ -969,204 +1082,581 @@ SiteInsight · {project_name}
 
 
 # ════════════════════════════════════════════════════════════════
-# SECTION: GENERATE PPT
+# SECTION: GENERATE PPT — Composer
 # ════════════════════════════════════════════════════════════════
 elif nav == "📊 Generate PPT":
-    st.markdown("### 📊 Presentation Generator")
-    st.caption("Choose slides — SiteInsight builds the deck automatically.")
+    st.markdown("### 📊 Presentation Composer")
+    st.caption(
+        "Select exactly what goes into each slide — add custom notes, "
+        "set slide order, embed graphs. Download as .pptx for further editing."
+    )
 
-    with st.form("ppt_form"):
-        pc1, pc2 = st.columns(2)
-        with pc1:
-            slide_cover   = st.checkbox("Cover slide",            value=True)
-            slide_health  = st.checkbox("Project health summary", value=True)
-            slide_phase   = st.checkbox("Phase-wise status",      value=True)
-        with pc2:
-            slide_risks   = st.checkbox("Top risks",              value=True)
-            slide_actions = st.checkbox("Next week action plan",  value=True)
-            slide_all     = st.checkbox("Select ALL",             value=False)
+    # ── Step 1: Details ───────────────────────────────────────
+    st.markdown("#### Step 1 — Presentation Details")
+    d1, d2 = st.columns(2)
+    ppt_by       = d1.text_input("Prepared by", value="Planning Team")
+    ppt_audience = d2.selectbox(
+        "Audience",
+        ["Project Director","Client","Internal Team","Site Review Meeting"]
+    )
 
-        ppt_by       = st.text_input("Prepared by", value="Planning Team")
-        ppt_audience = st.selectbox(
-            "Audience",
-            ["Project Director","Client","Internal Team","Site Review Meeting"]
+    st.divider()
+
+    # ── Step 2: Content Selector ──────────────────────────────
+    st.markdown("#### Step 2 — Select Content for Each Slide")
+    st.caption("Tick items to include. Add custom notes below each item.")
+
+    # Cover — always included
+    st.markdown("**🎯 Cover Slide** — always included")
+    st.divider()
+
+    # Executive Summary
+    inc_exec = st.checkbox("📋 Executive Summary", value=True, key="ppt_exec")
+    exec_note = ""
+    if inc_exec:
+        default_exec = narrative.get("executive_summary","") if narrative else ""
+        exec_note = st.text_area(
+            "Edit or add to Executive Summary",
+            value=default_exec, height=80, key="exec_note_ppt"
         )
-        gen_ppt = st.form_submit_button("Generate Presentation", type="primary")
+    st.divider()
 
-    if gen_ppt:
-        if slide_all:
-            slide_cover = slide_health = slide_phase = \
-                slide_risks = slide_actions = True
+    # Top Risks
+    st.markdown("**🚨 Top Risks**")
+    selected_risks = []
+    if not risk_df.empty:
+        for _, r in risk_df.head(8).iterrows():
+            risk_level = "HIGH" if r["score"]>=7 else "MEDIUM" if r["score"]>=4 else "LOW"
+            risk_label = f"{r['phase']} · {r['activity']} [{risk_level}]"
+            rc1, rc2 = st.columns([2, 3])
+            inc = rc1.checkbox(risk_label, value=(r["score"]>=7),
+                               key=f"ppt_risk_{r['act_id']}")
+            note = rc2.text_input(
+                "Custom note", placeholder="e.g. Client informed, recovery plan submitted",
+                key=f"ppt_risk_note_{r['act_id']}", label_visibility="collapsed"
+            )
+            if inc:
+                selected_risks.append({
+                    "label": risk_label,
+                    "flags": " · ".join(r["flags"]),
+                    "note":  note,
+                    "critical": bool(r.get("critical")),
+                })
+    else:
+        st.caption("No risks identified this week.")
+    st.divider()
 
-        selected_slides = (
-            (["cover"]             if slide_cover   else []) +
-            (["project_health"]    if slide_health  else []) +
-            (["phase_status"]      if slide_phase   else []) +
-            (["top_risks"]         if slide_risks   else []) +
-            (["next_week_actions"] if slide_actions else [])
-        )
-        if not selected_slides:
-            st.warning("Please select at least one slide.")
+    # Phase Status
+    st.markdown("**📊 Phase-wise Status**")
+    selected_phases_ppt = []
+    if not activities.empty:
+        for phase in sorted(activities["phase"].dropna().unique()):
+            grp = activities[activities["phase"]==phase]
+            avg_actual  = grp["cum_actual_pct"].mean() * 100
+            avg_planned = grp["cum_planned_pct"].mean() * 100
+            behind_n    = (grp["variance_pct"] < -0.05).sum()
+            ph1, ph2 = st.columns([2, 3])
+            inc = ph1.checkbox(
+                f"{phase} — {avg_actual:.0f}% vs {avg_planned:.0f}% planned",
+                value=True, key=f"ppt_phase_{phase}"
+            )
+            note = ph2.text_input(
+                "Custom note", placeholder="Key concern for this phase",
+                key=f"ppt_phase_note_{phase}", label_visibility="collapsed"
+            )
+            if inc:
+                selected_phases_ppt.append({
+                    "phase":    phase,
+                    "actual":   avg_actual,
+                    "planned":  avg_planned,
+                    "behind":   int(behind_n),
+                    "total":    len(grp),
+                    "note":     note,
+                })
+    st.divider()
+
+    # Delayed Activities
+    st.markdown("**⚠️ Delayed Activities**")
+    selected_delays_ppt = []
+    if not activities.empty:
+        behind_acts_ppt = activities[activities["variance_pct"] < -0.05]
+        if behind_acts_ppt.empty:
+            st.caption("No delayed activities this week.")
         else:
-            with st.spinner("Generating slide content via Groq..."):
-                behind_acts = activities[
-                    activities["variance_pct"] < -0.05
-                ] if not activities.empty else pd.DataFrame()
+            for _, r in behind_acts_ppt.iterrows():
+                cp_tag = " ⚡CRITICAL" if r.get("is_critical_path") else ""
+                act_label = f"{r['phase']} · {r['activity']}{cp_tag}"
+                da1, da2 = st.columns([2, 3])
+                inc = da1.checkbox(
+                    act_label,
+                    value=bool(r.get("is_critical_path")),
+                    key=f"ppt_delay_{r['act_id']}"
+                )
+                note = da2.text_input(
+                    "Recovery action note",
+                    placeholder="e.g. Additional gang mobilised from Phase III",
+                    key=f"ppt_delay_note_{r['act_id']}",
+                    label_visibility="collapsed"
+                )
+                if inc:
+                    selected_delays_ppt.append({
+                        "label":    act_label,
+                        "reason":   r.get("delay_reason","—"),
+                        "resp":     r.get("responsible_person","—") or "—",
+                        "note":     note,
+                        "critical": bool(r.get("is_critical_path")),
+                    })
+    st.divider()
 
-                phase_summary = ""
-                if not activities.empty:
-                    for phase, grp in activities.groupby("phase"):
-                        avg_v    = grp["variance_pct"].mean() * 100
-                        behind_n = (grp["variance_pct"] < -0.05).sum()
-                        phase_summary += (
-                            f"{phase}: avg variance {avg_v:.1f}%, "
-                            f"{behind_n}/{len(grp)} behind\n"
-                        )
+    # Graphs to embed
+    st.markdown("**📈 Graphs to Embed**")
+    st.caption("Selected graphs will be placed on 1–2 slides. Download pptx to rearrange.")
+    gcol1, gcol2, gcol3 = st.columns(3)
+    ppt_g_scurve    = gcol1.checkbox("S-Curve",              value=True,  key="ppt_gs")
+    ppt_g_variance  = gcol2.checkbox("Variance Trend",       value=True,  key="ppt_gv")
+    ppt_g_phase     = gcol3.checkbox("Phase-wise Completion",value=True,  key="ppt_gp")
+    gcol4, gcol5, gcol6 = st.columns(3)
+    ppt_g_slip      = gcol4.checkbox("Weeks Slip",           value=True,  key="ppt_gsl")
+    ppt_g_delay     = gcol5.checkbox("Delay Reasons",        value=False, key="ppt_gd")
+    ppt_g_critical  = gcol6.checkbox("Critical Path",        value=False, key="ppt_gc")
+    st.divider()
 
-                prompt = f"""Prepare PowerPoint content for {ppt_audience} — Week {selected_week} WPR for {project_name}.
+    # Action Items
+    inc_actions_ppt = st.checkbox("✅ Action Items Slide", value=True, key="ppt_actions")
+    actions_note_ppt = ""
+    if inc_actions_ppt:
+        actions_note_ppt = st.text_input(
+            "Custom note for Action Items",
+            placeholder="e.g. All actions reviewed and agreed by contractor",
+            key="ppt_actions_note"
+        )
+    st.divider()
+
+    # Next Week Targets
+    inc_next_ppt = st.checkbox("🎯 Next Week Targets Slide", value=True, key="ppt_next")
+    next_note_ppt = ""
+    if inc_next_ppt:
+        next_note_ppt = st.text_input(
+            "Custom note for Next Week Targets",
+            placeholder="e.g. Focus on Basement 1 recovery",
+            key="ppt_next_note"
+        )
+
+    st.divider()
+
+    # ── Step 3: Slide Order ───────────────────────────────────
+    st.markdown("#### Step 3 — Set Slide Order")
+    st.caption("Enter priority number for each section (1 = appears first)")
+
+    order_sections = []
+    if inc_exec:             order_sections.append("Executive Summary")
+    if selected_risks:       order_sections.append("Top Risks")
+    if selected_phases_ppt:  order_sections.append("Phase Status")
+    if selected_delays_ppt:  order_sections.append("Delayed Activities")
+    graph_selected = any([ppt_g_scurve,ppt_g_variance,ppt_g_phase,
+                          ppt_g_slip,ppt_g_delay,ppt_g_critical])
+    if graph_selected:       order_sections.append("Graphs")
+    if inc_actions_ppt:      order_sections.append("Action Items")
+    if inc_next_ppt:         order_sections.append("Next Week Targets")
+
+    slide_order_map = {}
+    if order_sections:
+        order_cols = st.columns(min(len(order_sections), 4))
+        for i, sec in enumerate(order_sections):
+            slide_order_map[sec] = order_cols[i % 4].number_input(
+                sec, min_value=1, max_value=20, value=i+1,
+                key=f"ppt_order_{sec}"
+            )
+        ordered_sections = sorted(order_sections, key=lambda x: slide_order_map.get(x, 99))
+    else:
+        ordered_sections = []
+
+    st.divider()
+
+    # ── Generate Button ───────────────────────────────────────
+    if st.button("🎯 Generate Presentation", type="primary"):
+        with st.spinner("Building slides via Groq..."):
+
+            # Build rich context for Groq
+            risks_ctx = "\n".join([
+                f"- {r['label']}: {r['flags']}"
+                + (f" | Note: {r['note']}" if r['note'] else "")
+                for r in selected_risks
+            ]) or "None selected"
+
+            phases_ctx = "\n".join([
+                f"- {p['phase']}: {p['actual']:.0f}% actual vs {p['planned']:.0f}% planned, "
+                f"{p['behind']}/{p['total']} activities behind"
+                + (f" | Note: {p['note']}" if p['note'] else "")
+                for p in selected_phases_ppt
+            ]) or "None selected"
+
+            delays_ctx = "\n".join([
+                f"- {d['label']} | Reason: {d['reason']} | Responsible: {d['resp']}"
+                + (f" | Recovery: {d['note']}" if d['note'] else "")
+                for d in selected_delays_ppt
+            ]) or "None selected"
+
+            prompt = f"""You are a senior planning engineer preparing a PowerPoint presentation for {ppt_audience}.
+
 PROJECT: {project_name} | WEEK: {selected_week} | BASELINE: {baseline_ver}
-Behind plan: {len(behind_acts)}/{len(activities)} activities
-Phase summary: {phase_summary}
-AI SUMMARY: {narrative.get('executive_summary','') if narrative else ''}
-KEY RISKS: {narrative.get('key_risks','') if narrative else ''}
+PREPARED BY: {ppt_by}
 
-Generate for slides: {', '.join(selected_slides)}
-Return JSON only — no markdown fences:
+SELECTED CONTENT:
+Executive Summary: {exec_note if inc_exec else 'Not included'}
+Top Risks: {risks_ctx}
+Phase Status: {phases_ctx}
+Delayed Activities: {delays_ctx}
+Action Items note: {actions_note_ppt if inc_actions_ppt else 'Not included'}
+Next Week note: {next_note_ppt if inc_next_ppt else 'Not included'}
+
+Generate slide content for these sections in order: {', '.join(ordered_sections)}
+
+Return ONLY valid JSON — no markdown fences, no extra text:
 {{
-  "cover":            {{"title":"...","bullets":[...],"highlight":"..."}},
-  "project_health":   {{"title":"...","bullets":[...],"highlight":"..."}},
-  "phase_status":     {{"title":"...","bullets":[...],"highlight":"..."}},
-  "top_risks":        {{"title":"...","bullets":[...],"highlight":"..."}},
-  "next_week_actions":{{"title":"...","bullets":[...],"highlight":"..."}}
+  "slides": [
+    {{
+      "section": "section name from ordered list",
+      "title": "Slide title — specific and impactful",
+      "bullets": ["bullet 1 — max 18 words, specific", "bullet 2", "bullet 3", "bullet 4", "bullet 5"],
+      "highlight": "Key stat or number for this slide"
+    }}
+  ]
 }}
-Rules: 3-5 bullets max 15 words each, specific, audience is {ppt_audience}"""
 
-                raw = call_groq(prompt, max_tokens=1200)
-                try:
-                    if "```" in raw:
-                        raw = raw.split("```")[1]
-                        if raw.startswith("json"):
-                            raw = raw[4:]
-                    slide_content = json.loads(raw.strip())
-                except Exception:
-                    slide_content = {}
+Rules:
+- 4-6 bullets per slide — substantive, not generic
+- Use actual project data — phase names, activity names, responsible persons from context
+- For {ppt_audience}: focus on {"decisions needed, milestone impact, cost risk" if ppt_audience=="Project Director" else "progress confidence, deliverables, timeline" if ppt_audience=="Client" else "who does what, specific actions, phase-wise accountability" if ppt_audience=="Internal Team" else "site actions, recovery plans, this week priorities"}
+- Highlight critical path impacts clearly
+- No percentages in bullet text — use plain language
+- Each slide must tell a clear story, not just list facts"""
 
-            SLIDE_ORDER = ["cover","project_health","phase_status",
-                           "top_risks","next_week_actions"]
-            SLIDE_LABELS = {
-                "cover":"Cover","project_health":"Project Health",
-                "phase_status":"Phase-wise Status","top_risks":"Top Risks",
-                "next_week_actions":"Next Week Actions",
-            }
+            raw = call_groq(prompt, max_tokens=2000)
+            try:
+                clean = raw.strip()
+                if "```" in clean:
+                    clean = clean.split("```")[1]
+                    if clean.startswith("json"):
+                        clean = clean[4:]
+                parsed = json.loads(clean.strip())
+                slides_data = parsed.get("slides", [])
+            except Exception:
+                slides_data = []
+                st.error("Could not parse slide content. Try generating again.")
 
+        # ── Preview slides ────────────────────────────────────
+        if slides_data:
             st.divider()
-            for key in SLIDE_ORDER:
-                if key not in slide_content:
-                    continue
-                s = slide_content[key]
-                with st.expander(f"Slide: {SLIDE_LABELS.get(key,key)}", expanded=True):
-                    sc1, sc2 = st.columns([2,1])
-                    with sc1:
-                        st.markdown(f"**{s.get('title','')}**")
-                        for b in s.get("bullets",[]):
-                            st.markdown(f"• {b}")
-                    with sc2:
-                        if s.get("highlight"):
-                            st.metric("Key stat", s["highlight"])
+            st.markdown("#### Preview — Review and Edit Before Downloading")
 
+            edited_slides = []
+            for i, slide in enumerate(slides_data):
+                with st.expander(
+                    f"Slide {i+2}: {slide.get('title','')}", expanded=True
+                ):
+                    col_preview, col_edit = st.columns([1, 1])
+                    with col_preview:
+                        st.markdown(f"**{slide.get('title','')}**")
+                        for b in slide.get("bullets",[]):
+                            st.markdown(f"▸ {b}")
+                        if slide.get("highlight"):
+                            st.info(f"📌 {slide['highlight']}")
+                    with col_edit:
+                        st.caption("Edit content:")
+                        new_title = st.text_input(
+                            "Title", value=slide.get("title",""),
+                            key=f"edit_title_{i}"
+                        )
+                        new_bullets_raw = st.text_area(
+                            "Bullets (one per line)",
+                            value="\n".join(slide.get("bullets",[])),
+                            height=120, key=f"edit_bullets_{i}"
+                        )
+                        new_highlight = st.text_input(
+                            "Key stat", value=slide.get("highlight",""),
+                            key=f"edit_highlight_{i}"
+                        )
+                        edited_slides.append({
+                            "section":   slide.get("section",""),
+                            "title":     new_title,
+                            "bullets":   [b.strip() for b in new_bullets_raw.split("\n") if b.strip()],
+                            "highlight": new_highlight,
+                        })
+
+            # ── Build graphs for embedding ────────────────────
+            graph_images = {}
+            if graph_selected and not history_df.empty:
+                with st.spinner("Generating graphs for embedding..."):
+                    if ppt_g_scurve:
+                        scurve = history_df.groupby("week_number").agg(
+                            actual=("cum_actual_pct","mean"),
+                            planned=("cum_planned_pct","mean")
+                        ).reset_index()
+                        scurve[["actual","planned"]] *= 100
+                        fig, ax = plt.subplots(figsize=(8,4))
+                        ax.plot(scurve["week_number"], scurve["planned"],
+                                color=NAVY, linewidth=2, label="Planned %",
+                                linestyle="--", marker="o", markersize=3)
+                        ax.plot(scurve["week_number"], scurve["actual"],
+                                color=AMBER, linewidth=2, label="Actual %",
+                                marker="o", markersize=3)
+                        ax.fill_between(scurve["week_number"],
+                                        scurve["planned"], scurve["actual"],
+                                        where=scurve["actual"]<scurve["planned"],
+                                        alpha=0.12, color=RED)
+                        ax.set_title("S-Curve: Planned vs Actual", fontweight="bold")
+                        ax.legend(fontsize=8); ax.grid(alpha=0.3)
+                        ax.set_facecolor("#FAFAFA"); fig.patch.set_facecolor("white")
+                        plt.tight_layout()
+                        buf = io.BytesIO()
+                        fig.savefig(buf, format="png", dpi=120, bbox_inches="tight")
+                        buf.seek(0); graph_images["scurve"] = buf.getvalue()
+                        plt.close(fig)
+
+                    if ppt_g_variance:
+                        trend = (history_df.groupby("week_number")["variance_pct"]
+                                 .mean().reset_index())
+                        trend["variance_pct"] *= 100
+                        fig, ax = plt.subplots(figsize=(8,3.5))
+                        colors = [RED if v < 0 else GREEN for v in trend["variance_pct"]]
+                        ax.bar(trend["week_number"], trend["variance_pct"],
+                               color=colors, width=0.6)
+                        ax.axhline(0, color=GRAY, linewidth=0.8, linestyle="--")
+                        ax.set_title("Average Variance by Week", fontweight="bold")
+                        ax.grid(axis="y", alpha=0.3)
+                        ax.set_facecolor("#FAFAFA"); fig.patch.set_facecolor("white")
+                        plt.tight_layout()
+                        buf = io.BytesIO()
+                        fig.savefig(buf, format="png", dpi=120, bbox_inches="tight")
+                        buf.seek(0); graph_images["variance"] = buf.getvalue()
+                        plt.close(fig)
+
+                    if ppt_g_phase and not activities.empty:
+                        pd_data = activities.groupby("phase").agg(
+                            actual=("cum_actual_pct","mean"),
+                            planned=("cum_planned_pct","mean")
+                        ).reset_index()
+                        pd_data[["actual","planned"]] *= 100
+                        fig, ax = plt.subplots(figsize=(8,4))
+                        x = range(len(pd_data)); w = 0.35
+                        ax.bar([i-w/2 for i in x], pd_data["planned"],
+                               w, label="Planned %", color=NAVY, alpha=0.85)
+                        ax.bar([i+w/2 for i in x], pd_data["actual"],
+                               w, label="Actual %", color=AMBER, alpha=0.85)
+                        ax.set_xticks(list(x))
+                        ax.set_xticklabels(pd_data["phase"])
+                        ax.set_title("Phase-wise Completion", fontweight="bold")
+                        ax.legend(); ax.grid(axis="y", alpha=0.3)
+                        ax.set_facecolor("#FAFAFA"); fig.patch.set_facecolor("white")
+                        plt.tight_layout()
+                        buf = io.BytesIO()
+                        fig.savefig(buf, format="png", dpi=120, bbox_inches="tight")
+                        buf.seek(0); graph_images["phase"] = buf.getvalue()
+                        plt.close(fig)
+
+                    if ppt_g_slip and not activities.empty:
+                        slip_data = activities[activities["weeks_slip"]>0].sort_values(
+                            "weeks_slip", ascending=True)
+                        if not slip_data.empty:
+                            fig, ax = plt.subplots(
+                                figsize=(8, max(3, len(slip_data)*0.4)))
+                            labels = [f"{r.get('phase','')} · {r.get('activity','')}"
+                                      for _, r in slip_data.iterrows()]
+                            colors = [RED if r.get("is_critical_path") else AMBER
+                                      for _, r in slip_data.iterrows()]
+                            ax.barh(labels, slip_data["weeks_slip"],
+                                    color=colors, height=0.5)
+                            ax.set_title("Weeks Slip by Activity", fontweight="bold")
+                            ax.grid(axis="x", alpha=0.3)
+                            ax.set_facecolor("#FAFAFA"); fig.patch.set_facecolor("white")
+                            plt.tight_layout()
+                            buf = io.BytesIO()
+                            fig.savefig(buf, format="png", dpi=120, bbox_inches="tight")
+                            buf.seek(0); graph_images["slip"] = buf.getvalue()
+                            plt.close(fig)
+
+            # ── Build PPTX ────────────────────────────────────
             try:
                 from pptx import Presentation as PPTXPres
-                from pptx.util import Inches, Pt
+                from pptx.util import Inches, Pt, Emu
                 from pptx.dml.color import RGBColor as RGB
 
-                prs              = PPTXPres()
+                prs = PPTXPres()
                 prs.slide_width  = Inches(13.33)
                 prs.slide_height = Inches(7.5)
-                blank            = prs.slide_layouts[6]
+                blank = prs.slide_layouts[6]
 
-                C_NAVY   = RGB(0x1E,0x27,0x61)
-                C_WHITE  = RGB(0xFF,0xFF,0xFF)
-                C_AMBER  = RGB(0xE8,0x77,0x22)
-                C_GRAY   = RGB(0x44,0x44,0x44)
+                C_NAVY  = RGB(0x1E, 0x27, 0x61)
+                C_WHITE = RGB(0xFF, 0xFF, 0xFF)
+                C_AMBER = RGB(0xE8, 0x77, 0x22)
+                C_GRAY  = RGB(0x44, 0x44, 0x44)
+                C_RED   = RGB(0xD3, 0x2F, 0x2F)
 
-                def add_slide(title_text, bullets, highlight=None, is_cover=False):
-                    sl  = prs.slides.add_slide(blank)
-                    bg  = sl.shapes.add_shape(1,0,0,prs.slide_width,prs.slide_height)
+                def pptx_slide(title_text, bullets, highlight=None,
+                               is_cover=False, note_text=""):
+                    sl = prs.slides.add_slide(blank)
+                    # Background
+                    bg = sl.shapes.add_shape(
+                        1, 0, 0, prs.slide_width, prs.slide_height)
                     bg.fill.solid()
                     bg.fill.fore_color.rgb = C_NAVY if is_cover else C_WHITE
                     bg.line.fill.background()
-                    bar = sl.shapes.add_shape(1,0,0,prs.slide_width,Inches(0.07))
+                    # Top amber bar
+                    bar = sl.shapes.add_shape(
+                        1, 0, 0, prs.slide_width, Inches(0.08))
                     bar.fill.solid()
                     bar.fill.fore_color.rgb = C_AMBER
                     bar.line.fill.background()
-                    tb = sl.shapes.add_textbox(Inches(0.5),Inches(0.25),Inches(12),Inches(1.2))
-                    p  = tb.text_frame.paragraphs[0]
+                    # Title
+                    tb = sl.shapes.add_textbox(
+                        Inches(0.5), Inches(0.18), Inches(11.5), Inches(1.1))
+                    p = tb.text_frame.paragraphs[0]
                     p.text = title_text
-                    p.font.size = Pt(34 if is_cover else 26)
+                    p.font.size = Pt(30 if is_cover else 24)
                     p.font.bold = True
                     p.font.color.rgb = C_WHITE if is_cover else C_NAVY
                     if is_cover:
-                        sb = sl.shapes.add_textbox(Inches(0.5),Inches(1.8),Inches(12),Inches(1))
-                        sp2 = sb.text_frame.paragraphs[0]
-                        sp2.text = f"Week {selected_week:02d} · {project_name}"
-                        sp2.font.size = Pt(18)
-                        sp2.font.color.rgb = C_AMBER
-                        db  = sl.shapes.add_textbox(Inches(0.5),Inches(3.0),Inches(12),Inches(2.5))
-                        dtf = db.text_frame
+                        sub = sl.shapes.add_textbox(
+                            Inches(0.5), Inches(1.6), Inches(12), Inches(0.8))
+                        sp = sub.text_frame.paragraphs[0]
+                        sp.text = f"Week {selected_week:02d}  ·  {project_name}  ·  {ppt_audience}"
+                        sp.font.size = Pt(16)
+                        sp.font.color.rgb = C_AMBER
+                        details = sl.shapes.add_textbox(
+                            Inches(0.5), Inches(2.8), Inches(12), Inches(2))
+                        dtf = details.text_frame
                         dtf.word_wrap = True
                         for i, line in enumerate([
                             f"Baseline: {baseline_ver}",
                             f"Contractor: {contractor}",
                             f"Prepared by: {ppt_by}",
-                            f"Audience: {ppt_audience}",
                         ]):
-                            dp = dtf.paragraphs[0] if i == 0 else dtf.add_paragraph()
+                            dp = dtf.paragraphs[0] if i==0 else dtf.add_paragraph()
                             dp.text = line
-                            dp.font.size = Pt(14)
+                            dp.font.size = Pt(13)
                             dp.font.color.rgb = C_WHITE
                     else:
+                        # Highlight box
                         if highlight:
-                            hb = sl.shapes.add_shape(1,Inches(10.5),Inches(1.6),Inches(2.3),Inches(1.4))
+                            hb = sl.shapes.add_shape(
+                                1, Inches(10.3), Inches(1.4),
+                                Inches(2.6), Inches(1.5))
                             hb.fill.solid()
                             hb.fill.fore_color.rgb = C_AMBER
                             hb.line.fill.background()
                             ht = hb.text_frame.paragraphs[0]
                             ht.text = str(highlight)
-                            ht.font.size = Pt(20)
+                            ht.font.size = Pt(18)
                             ht.font.bold = True
                             ht.font.color.rgb = C_WHITE
-                        bb  = sl.shapes.add_textbox(Inches(0.5),Inches(1.6),Inches(9.8),Inches(5.5))
+                            ht.alignment = 2  # center
+                        # Bullets
+                        bb = sl.shapes.add_textbox(
+                            Inches(0.5), Inches(1.4), Inches(9.6), Inches(5.6))
                         btf = bb.text_frame
                         btf.word_wrap = True
                         for i, bullet in enumerate(bullets):
-                            bp = btf.paragraphs[0] if i == 0 else btf.add_paragraph()
+                            bp = btf.paragraphs[0] if i==0 else btf.add_paragraph()
                             bp.text = f"▸  {bullet}"
-                            bp.font.size = Pt(15)
+                            bp.font.size = Pt(14)
                             bp.font.color.rgb = C_GRAY
-                            bp.space_after = Pt(8)
-                    ft = sl.shapes.add_textbox(Inches(0.5),Inches(7.1),Inches(12),Inches(0.3))
+                            bp.space_after = Pt(7)
+                        # Custom note
+                        if note_text:
+                            nb = sl.shapes.add_textbox(
+                                Inches(0.5), Inches(6.6), Inches(12), Inches(0.5))
+                            np_ = nb.text_frame.paragraphs[0]
+                            np_.text = f"📌 {note_text}"
+                            np_.font.size = Pt(10)
+                            np_.font.color.rgb = C_AMBER
+                            np_.font.italic = True
+                    # Footer
+                    ft = sl.shapes.add_textbox(
+                        Inches(0.5), Inches(7.15), Inches(12), Inches(0.28))
                     fp = ft.text_frame.paragraphs[0]
-                    fp.text = f"SiteInsight · {project_name} · Week {selected_week:02d} · CONFIDENTIAL"
-                    fp.font.size = Pt(8)
-                    fp.font.color.rgb = RGB(0x99,0x99,0x99)
+                    fp.text = (f"SiteInsight  ·  {project_name}  ·  "
+                               f"Week {selected_week:02d}  ·  CONFIDENTIAL")
+                    fp.font.size = Pt(7)
+                    fp.font.color.rgb = RGB(0xAA, 0xAA, 0xAA)
 
-                for key in SLIDE_ORDER:
-                    if key not in slide_content:
-                        continue
-                    s = slide_content[key]
-                    add_slide(s.get("title",key), s.get("bullets",[]),
-                              s.get("highlight"), is_cover=(key=="cover"))
+                # Cover slide
+                pptx_slide(
+                    f"Weekly Progress Report — Week {selected_week:02d}",
+                    [], is_cover=True
+                )
+
+                # Content slides in order
+                for slide in edited_slides:
+                    sec = slide.get("section","")
+                    note = ""
+                    if "Executive" in sec:     note = exec_note
+                    elif "Action" in sec:      note = actions_note_ppt
+                    elif "Next" in sec:        note = next_note_ppt
+                    pptx_slide(
+                        slide["title"],
+                        slide["bullets"],
+                        slide.get("highlight",""),
+                        note_text=note
+                    )
+
+                # Graph slide(s)
+                if graph_images:
+                    imgs = list(graph_images.values())
+                    # Up to 2 graphs per slide
+                    for slide_start in range(0, len(imgs), 2):
+                        sl = prs.slides.add_slide(blank)
+                        bg = sl.shapes.add_shape(
+                            1, 0, 0, prs.slide_width, prs.slide_height)
+                        bg.fill.solid()
+                        bg.fill.fore_color.rgb = C_WHITE
+                        bg.line.fill.background()
+                        bar = sl.shapes.add_shape(
+                            1, 0, 0, prs.slide_width, Inches(0.08))
+                        bar.fill.solid()
+                        bar.fill.fore_color.rgb = C_AMBER
+                        bar.line.fill.background()
+                        tb = sl.shapes.add_textbox(
+                            Inches(0.5), Inches(0.18), Inches(12), Inches(0.9))
+                        p = tb.text_frame.paragraphs[0]
+                        p.text = "Project Analytics — Charts"
+                        p.font.size = Pt(22); p.font.bold = True
+                        p.font.color.rgb = C_NAVY
+                        chunk = imgs[slide_start:slide_start+2]
+                        positions = (
+                            [(Inches(0.4), Inches(1.1), Inches(12.5), Inches(6.0))]
+                            if len(chunk)==1 else
+                            [(Inches(0.3), Inches(1.1), Inches(6.3), Inches(6.0)),
+                             (Inches(6.8), Inches(1.1), Inches(6.3), Inches(6.0))]
+                        )
+                        for img_bytes, (l, t, w, h) in zip(chunk, positions):
+                            img_buf = io.BytesIO(img_bytes)
+                            sl.shapes.add_picture(img_buf, l, t, w, h)
+                        ft = sl.shapes.add_textbox(
+                            Inches(0.5), Inches(7.15), Inches(12), Inches(0.28))
+                        fp = ft.text_frame.paragraphs[0]
+                        fp.text = (f"SiteInsight  ·  {project_name}  ·  "
+                                   f"Week {selected_week:02d}  ·  CONFIDENTIAL")
+                        fp.font.size = Pt(7)
+                        fp.font.color.rgb = RGB(0xAA, 0xAA, 0xAA)
 
                 buf = io.BytesIO()
                 prs.save(buf)
                 buf.seek(0)
+                st.divider()
                 st.download_button(
                     "⬇️ Download PowerPoint (.pptx)", buf,
-                    f"SiteInsight_Wk{selected_week:02d}.pptx",
+                    f"SiteInsight_Wk{selected_week:02d}_{ppt_audience.replace(' ','_')}.pptx",
                     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
                 )
+                st.success(
+                    f"✅ Presentation ready — {len(edited_slides)+1} content slides "
+                    f"+ {len(list(range(0,len(graph_images),2)))} graph slide(s). "
+                    f"Open in PowerPoint to further customise."
+                )
+
             except ImportError:
-                st.warning("python-pptx not installed. Run: pip install python-pptx --only-binary=:all:")
+                st.warning("python-pptx not installed. Run: pip install python-pptx")
 
 
 # ════════════════════════════════════════════════════════════════
@@ -1449,13 +1939,15 @@ elif nav == "🔄 Recovery Simulator":
             act_row = behind_acts[
                 behind_acts["act_id"] == selected_act_id].iloc[0]
 
-            current_pct   = float(act_row["cum_actual_pct"] or 0)
-            planned_pct   = float(act_row["cum_planned_pct"] or 0)
-            variance      = float(act_row["variance_pct"] or 0)
-            weeks_slip    = int(act_row["weeks_slip"])
-            delay_reason  = act_row.get("delay_reason","—")
+            current_pct   = float(act_row["cum_actual_pct"] or 0) if pd.notna(act_row["cum_actual_pct"]) else 0.0
+            planned_pct   = float(act_row["cum_planned_pct"] or 0) if pd.notna(act_row["cum_planned_pct"]) else 0.0
+            variance      = float(act_row["variance_pct"] or 0) if pd.notna(act_row["variance_pct"]) else 0.0
+            weeks_slip    = int(act_row["weeks_slip"]) if pd.notna(act_row["weeks_slip"]) else 0
+            delay_reason  = act_row.get("delay_reason","—") or "—"
             resp_person   = act_row.get("responsible_person","—") or "—"
             hist_velocity = compute_weekly_velocity(history_df, selected_act_id)
+            if pd.isna(hist_velocity) or hist_velocity is None:
+                hist_velocity = 0.02
 
             st.divider()
             col_s1, col_s2, col_s3, col_s4, col_s5 = st.columns(5)
