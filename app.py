@@ -1719,7 +1719,7 @@ elif nav == "📈 Generate Graphs":
             buf = io.BytesIO()
             fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
             buf.seek(0)
-            st.image(buf, use_container_width=True)
+            st.image(buf, use_column_width=True)
             st.download_button("⬇️ Download S-Curve", buf,
                                f"scurve_Wk{selected_week:02d}.png",
                                "image/png", key="dl_sc")
@@ -1747,7 +1747,7 @@ elif nav == "📈 Generate Graphs":
             buf = io.BytesIO()
             fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
             buf.seek(0)
-            st.image(buf, use_container_width=True)
+            st.image(buf, use_column_width=True)
             st.download_button("⬇️ Download", buf,
                                f"variance_Wk{selected_week:02d}.png",
                                "image/png", key="dl_v")
@@ -1782,7 +1782,7 @@ elif nav == "📈 Generate Graphs":
             buf = io.BytesIO()
             fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
             buf.seek(0)
-            st.image(buf, use_container_width=True)
+            st.image(buf, use_column_width=True)
             st.download_button("⬇️ Download", buf,
                                f"phase_Wk{selected_week:02d}.png",
                                "image/png", key="dl_p")
@@ -1827,7 +1827,7 @@ elif nav == "📈 Generate Graphs":
                 buf = io.BytesIO()
                 fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
                 buf.seek(0)
-                st.image(buf, use_container_width=True)
+                st.image(buf, use_column_width=True)
                 st.download_button("⬇️ Download", buf,
                                    f"slip_Wk{selected_week:02d}.png",
                                    "image/png", key="dl_s")
@@ -1864,7 +1864,7 @@ elif nav == "📈 Generate Graphs":
                 buf = io.BytesIO()
                 fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
                 buf.seek(0)
-                st.image(buf, use_container_width=True)
+                st.image(buf, use_column_width=True)
                 st.download_button("⬇️ Download", buf,
                                    f"delay_Wk{selected_week:02d}.png",
                                    "image/png", key="dl_d")
@@ -1903,7 +1903,7 @@ elif nav == "📈 Generate Graphs":
                 buf = io.BytesIO()
                 fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
                 buf.seek(0)
-                st.image(buf, use_container_width=True)
+                st.image(buf, use_column_width=True)
                 st.download_button("⬇️ Download", buf,
                                    f"critical_Wk{selected_week:02d}.png",
                                    "image/png", key="dl_c")
@@ -2041,7 +2041,7 @@ elif nav == "🔄 Recovery Simulator":
             buf = io.BytesIO()
             fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
             buf.seek(0)
-            st.image(buf, use_container_width=True)
+            st.image(buf, use_column_width=True)
             st.download_button("⬇️ Download simulation chart", buf,
                                f"recovery_{selected_act_id}_Wk{selected_week:02d}.png",
                                "image/png", key="dl_sim")
@@ -2219,7 +2219,7 @@ elif nav == "⚠️ Early Warning":
                 buf = io.BytesIO()
                 fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
                 buf.seek(0)
-                st.image(buf, use_container_width=True)
+                st.image(buf, use_column_width=True)
                 st.download_button("⬇️ Download early warning chart", buf,
                                    f"early_warning_Wk{selected_week:02d}.png",
                                    "image/png", key="dl_ew")
