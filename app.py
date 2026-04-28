@@ -841,7 +841,7 @@ if nav == "📋 Intelligence Report":
                 st.image(
                     photo["url"],
                     caption=photo["caption"],
-                    use_container_width=True,
+                    use_column_width=True,
                 )
 
 
