@@ -827,7 +827,7 @@ if nav == "📋 Intelligence Report":
             ucols = st.columns(4)
             for i, (up, cap) in enumerate(zip(uploaded, captions)):
                 if up:
-                    ucols[i].image(up, caption=cap, use_container_width=True)
+                    ucols[i].image(up, caption=cap, use_column_width=True)
 
     with photo_tab2:
         st.caption(
