@@ -173,6 +173,13 @@ ACTIVITIES BEHIND PLAN ({len(behind_acts)}):
                    f"Reason: {a.get('delay_reason','')} · "
                    f"Responsible: {a.get('responsible_person','—')}\n")
 
+    if ahead_acts:
+        prompt += f"\nACTIVITIES AHEAD OF PLAN ({len(ahead_acts)}) — positive indicators:\n"
+        for a in ahead_acts:
+            prompt += (f"  {a.get('phase','')} · {a['activity']} · "
+                       f"Ahead by: +{a.get('variance_pct',0)*100:.1f}% · "
+                       f"Responsible: {a.get('responsible_person','—')}\n")
+
     if dq_flags:
         prompt += f"\nDATA QUALITY FLAGS ({len(dq_flags)}):\n"
         for f in dq_flags:
@@ -181,7 +188,7 @@ ACTIVITIES BEHIND PLAN ({len(behind_acts)}):
     prompt += """
 Produce a JSON response with exactly these keys:
 {
-  "executive_summary": "2-3 sentence overall project status for this week",
+  "executive_summary": "2-3 sentence overall project status for this week — mention both delays AND any activities ahead of plan",
   "key_risks": "Bullet-point list of top 3 risks identified",
   "recommendations": "Bullet-point list of top 3 recommended actions for next week"
 }
@@ -189,6 +196,7 @@ Produce a JSON response with exactly these keys:
 Rules:
 - Be specific: name activities, phases, percentages
 - Use plain English, no jargon
+- Mention activities ahead of plan positively in executive summary
 - Keep each section under 150 words
 - Return ONLY the JSON object, no preamble, no markdown fences
 """
@@ -322,11 +330,15 @@ def run_pipeline(filepath: Path, dry_run: bool = False) -> dict:
             activities, on_conflict="week_number,act_id"
         ).execute()
 
-        # DQ flags
+        # DQ flags — delete existing then insert fresh
+        supabase.table("dq_flags").delete().eq(
+            "week_number", week_number).execute()
         if dq_flags:
             supabase.table("dq_flags").insert(dq_flags).execute()
 
-        # Detection results
+        # Detection results — delete existing then insert fresh
+        supabase.table("detection_results").delete().eq(
+            "week_number", week_number).execute()
         if detections:
             supabase.table("detection_results").insert(detections).execute()
 
