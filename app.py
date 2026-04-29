@@ -870,6 +870,7 @@ elif nav == "📋 Intelligence Report":
                 pass
         exec_sum = exec_sum.strip('"').strip("'").strip()
         if exec_sum:
+            st.info(exec_sum)
 
         # Trend commentary
         if not history_df.empty:
