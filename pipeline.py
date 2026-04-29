@@ -188,58 +188,72 @@ ACTIVITIES BEHIND PLAN ({len(behind_acts)}):
     prompt += """
 Produce a JSON response with exactly these keys:
 {
-  "executive_summary": "2-3 sentence overall project status for this week — mention both delays AND any activities ahead of plan",
-  "key_risks": "Bullet-point list of top 3 risks identified",
-  "recommendations": "Bullet-point list of top 3 recommended actions for next week"
+  "executive_summary": "Write a polished senior management summary in 3 concise sentences. Sentence 1: overall project health this week (improving / stable / deteriorating). Sentence 2: key delays, affected phases, critical concerns. Sentence 3: positive progress areas, immediate management focus, and next-week outlook.",
 }
 
 Rules:
-- Be specific: name activities, phases, percentages
-- Use plain English, no jargon
-- Mention activities ahead of plan positively in executive summary
-- Keep each section under 150 words
-- Return ONLY the JSON object, no preamble, no markdown fences
+- Write like a professional project controls manager reporting to directors
+- Use confident business language
+- Mention actual phase/activity names
+- Balance risks with progress made
+- No robotic wording
+- No bullet points inside executive_summary
+- Maximum 90 words
+- Return ONLY JSON object
 """
     return prompt
 
 
 def call_groq(prompt: str) -> dict:
-    """Call Groq API and return parsed JSON + token counts."""
     response = groq_client.chat.completions.create(
         model=GROQ_MODEL,
         messages=[{"role": "user", "content": prompt}],
         temperature=0.3,
         max_tokens=800,
     )
+
     raw = response.choices[0].message.content.strip()
     usage = response.usage
 
-    # Strip markdown fences if model adds them despite instructions
+    # remove markdown fences
     if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    raw = raw.strip()
+        raw = raw.replace("```json", "").replace("```", "").strip()
+
+    parsed = {}
 
     try:
         parsed = json.loads(raw)
-    except Exception:
-        parsed = {
-        "executive_summary": raw[:1000],
-        "key_risks": "Could not parse structured response.",
-        "recommendations": "Review raw Groq output."
-    }
 
-    # Ensure key_risks and recommendations are stored as clean strings
-    if isinstance(parsed.get("key_risks"), list):
-        parsed["key_risks"] = json.dumps(parsed["key_risks"])
-    if isinstance(parsed.get("recommendations"), list):
-        parsed["recommendations"] = json.dumps(parsed["recommendations"])
+    except Exception:
+        # try extracting json portion only
+        try:
+            start = raw.find("{")
+            end = raw.rfind("}") + 1
+            if start >= 0 and end > start:
+                parsed = json.loads(raw[start:end])
+        except:
+            parsed = {}
+
+    # fallback safe values
+    if not parsed:
+        parsed = {
+            "executive_summary": raw.strip(),
+            "key_risks": "",
+            "recommendations": ""
+        }
+
+    # force clean strings
+    for key in ["executive_summary", "key_risks", "recommendations"]:
+        val = parsed.get(key, "")
+        if isinstance(val, list):
+            val = "\n".join([str(x) for x in val])
+
+        parsed[key] = str(val).strip().strip('"').strip("'")
 
     return {
-        "parsed":            parsed,
-        "full_response":     raw,
-        "prompt_tokens":     usage.prompt_tokens,
+        "parsed": parsed,
+        "full_response": raw,
+        "prompt_tokens": usage.prompt_tokens,
         "completion_tokens": usage.completion_tokens,
     }
 
