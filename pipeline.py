@@ -214,12 +214,22 @@ def call_groq(prompt: str) -> dict:
     raw = raw.strip()
 
     try:
-        parsed = json.loads(raw)
-    except json.JSONDecodeError:
+    # Try normal JSON parse first
+    parsed = json.loads(raw)
+
+except json.JSONDecodeError:
+    try:
+        # Try extracting only JSON part if extra text exists
+        start = raw.find("{")
+        end = raw.rfind("}") + 1
+        cleaned = raw[start:end]
+        parsed = json.loads(cleaned)
+
+    except Exception:
         parsed = {
-            "executive_summary": raw,
-            "key_risks":         "Could not parse structured response.",
-            "recommendations":   "Review raw Groq output.",
+            "executive_summary": raw[:1000],
+            "key_risks": "Could not parse structured response.",
+            "recommendations": "Review raw Groq output."
         }
 
     # Ensure key_risks and recommendations are stored as clean strings
