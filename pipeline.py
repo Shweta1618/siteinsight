@@ -188,17 +188,19 @@ ACTIVITIES BEHIND PLAN ({len(behind_acts)}):
     prompt += """
 Produce a JSON response with exactly these keys:
 {
-  "executive_summary": "Write a polished senior management summary in 3 concise sentences. Sentence 1: overall project health this week (improving / stable / deteriorating). Sentence 2: key delays, affected phases, critical concerns. Sentence 3: positive progress areas, immediate management focus, and next-week outlook.",
+  "executive_summary": "Write a polished senior management summary in 3 concise sentences. Sentence 1: overall project health this week (improving / stable / under pressure / deteriorating) using actual schedule context. Sentence 2: highlight the most critical high-risk flagged activities, affected phases, delays, percentages or activity counts, and why management attention is required. Sentence 3: mention positive progress areas, recovery opportunities, and next-week outlook. Make each week's summary specific, data-driven, and different from previous weeks.",
 }
 
 Rules:
-- Write like a professional project controls manager reporting to directors
-- Use confident business language
-- Mention actual phase/activity names
-- Balance risks with progress made
+- Write like a senior project controls manager reporting to directors
+- Use professional business language
+- Prioritize high severity detection flags (R1 / R4)
+- Mention real phase/activity names from report
+- Include percentages or counts where meaningful
+- Balance risks with progress achieved
 - No robotic wording
 - No bullet points inside executive_summary
-- Maximum 90 words
+- Maximum 95 words
 - Return ONLY JSON object
 """
     return prompt
