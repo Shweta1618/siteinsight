@@ -52,6 +52,22 @@ GREEN  = "#2E7D32"
 GRAY   = "#666666"
 LGRAY  = "#F5F5F5"
 
+# ── Project Details ───────────────────────────────────────────
+PROJECT_DETAILS = {
+    "name":           "Horizon Commercial Tower",
+    "location":       "Mumbai, Maharashtra",
+    "client":         "Horizon Developers Pvt Ltd",
+    "contractor":     "SteelForm RCC Contractors",
+    "bua":            "63,455 Sqm",
+    "structure":      "2 Basement + 9 Floors",
+    "rcc_value":      "Rs 52.87 Crore",
+    "total_value":    "Rs 485 Crore",
+    "start_date":     "02 Jun 2025",
+    "end_date":       "31 Dec 2026",
+    "duration":       "80 Weeks (18.5 months)",
+    "revised_end":    "30 Jun 2027",
+    "baseline":       "B1",
+}
 # ── Page config ───────────────────────────────────────────────
 st.set_page_config(
     page_title="SiteInsight · WPR Intelligence",
@@ -476,7 +492,8 @@ with st.sidebar:
     st.markdown("**Navigate to**")
     nav = st.radio(
         "nav",
-        ["📋 Intelligence Report",
+        ["🏠 Project Overview",
+         "📋 Intelligence Report",
          "📝 Generate MOM",
          "📊 Generate PPT",
          "📈 Generate Graphs",
@@ -586,12 +603,224 @@ if not activities.empty:
               delta_color="inverse" if max_slip > 0 else "normal")
 
 st.divider()
+# ════════════════════════════════════════════════════════════════
+# SECTION: PROJECT OVERVIEW — Landing Page
+# ════════════════════════════════════════════════════════════════
+if nav == "🏠 Project Overview":
+
+    # Hero section with background
+    st.markdown(f"""
+    <div style="
+        background-image: linear-gradient(rgba(10,15,40,0.75), rgba(10,15,40,0.85)),
+        url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=80');
+        background-size: cover;
+        background-position: center;
+        border-radius: 14px;
+        padding: 48px 40px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    ">
+        <div style="color:#E87722;font-size:0.85rem;font-weight:700;
+                    letter-spacing:2px;text-transform:uppercase;
+                    margin-bottom:8px;">
+            WPR Intelligence Platform · SiteInsight
+        </div>
+        <h1 style="color:#FFFFFF;font-size:2.4rem;font-weight:900;
+                   margin:0 0 6px 0;letter-spacing:-0.5px;">
+            🏗 {PROJECT_DETAILS['name']}
+        </h1>
+        <p style="color:#A8C8F0;font-size:1.1rem;margin:0 0 24px 0;">
+            {PROJECT_DETAILS['location']}
+        </p>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+            <div style="background:rgba(232,119,34,0.15);border:1px solid #E87722;
+                        border-radius:8px;padding:12px 20px;min-width:140px;">
+                <div style="color:#A8C8F0;font-size:0.7rem;text-transform:uppercase;
+                            letter-spacing:1px;">Current Week</div>
+                <div style="color:#FFFFFF;font-size:1.6rem;font-weight:800;">
+                    Wk {selected_week:02d}
+                </div>
+            </div>
+            <div style="background:rgba(232,119,34,0.15);border:1px solid #E87722;
+                        border-radius:8px;padding:12px 20px;min-width:140px;">
+                <div style="color:#A8C8F0;font-size:0.7rem;text-transform:uppercase;
+                            letter-spacing:1px;">Report Date</div>
+                <div style="color:#FFFFFF;font-size:1.1rem;font-weight:700;">
+                    {report_date}
+                </div>
+            </div>
+            <div style="background:rgba(232,119,34,0.15);border:1px solid #E87722;
+                        border-radius:8px;padding:12px 20px;min-width:140px;">
+                <div style="color:#A8C8F0;font-size:0.7rem;text-transform:uppercase;
+                            letter-spacing:1px;">Baseline</div>
+                <div style="color:#FFFFFF;font-size:1.6rem;font-weight:800;">
+                    {PROJECT_DETAILS['baseline']}
+                </div>
+            </div>
+            <div style="background:rgba(232,119,34,0.15);border:1px solid #E87722;
+                        border-radius:8px;padding:12px 20px;min-width:140px;">
+                <div style="color:#A8C8F0;font-size:0.7rem;text-transform:uppercase;
+                            letter-spacing:1px;">Revised Completion</div>
+                <div style="color:#FFFFFF;font-size:1.1rem;font-weight:700;">
+                    {PROJECT_DETAILS['revised_end']}
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Project details table
+    st.markdown("### 📋 Project Information")
+    col_left, col_right = st.columns(2)
+
+    details_left = [
+        ("Total Built-up Area",     PROJECT_DETAILS["bua"]),
+        ("Structure",               PROJECT_DETAILS["structure"]),
+        ("RCC Contract Value",      PROJECT_DETAILS["rcc_value"]),
+        ("Total Project Value",     PROJECT_DETAILS["total_value"]),
+        ("Client",                  PROJECT_DETAILS["client"]),
+        ("Contractor",              PROJECT_DETAILS["contractor"]),
+    ]
+    details_right = [
+        ("Contractual Start Date",  PROJECT_DETAILS["start_date"]),
+        ("Contractual End Date",    PROJECT_DETAILS["end_date"]),
+        ("Project Duration",        PROJECT_DETAILS["duration"]),
+        ("Revised Completion",      PROJECT_DETAILS["revised_end"]),
+        ("Active Baseline",         PROJECT_DETAILS["baseline"]),
+        ("Current Report Week",     f"Week {selected_week:02d} of 80"),
+    ]
+
+    with col_left:
+        for label, value in details_left:
+            st.markdown(f"""
+            <div style="display:flex;justify-content:space-between;
+                        padding:10px 14px;border-bottom:1px solid #F0F0F0;
+                        background:#FAFAFA;border-radius:4px;margin-bottom:4px;">
+                <span style="color:#666;font-size:0.85rem;">{label}</span>
+                <span style="color:#1E2761;font-weight:700;font-size:0.9rem;">
+                    {value}
+                </span>
+            </div>
+            """, unsafe_allow_html=True)
+
+    with col_right:
+        for label, value in details_right:
+            st.markdown(f"""
+            <div style="display:flex;justify-content:space-between;
+                        padding:10px 14px;border-bottom:1px solid #F0F0F0;
+                        background:#FAFAFA;border-radius:4px;margin-bottom:4px;">
+                <span style="color:#666;font-size:0.85rem;">{label}</span>
+                <span style="color:#1E2761;font-weight:700;font-size:0.9rem;">
+                    {value}
+                </span>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.divider()
+
+    # KPI snapshot
+    st.markdown("### 📊 This Week at a Glance")
+    if not activities.empty:
+        total_acts      = len(activities)
+        behind          = int((activities["variance_pct"].fillna(0) < -0.05).sum())
+        ahead           = int((activities["variance_pct"].fillna(0) > 0.05).sum())
+        complete        = int((activities["cum_actual_pct"].fillna(0) >= 1.0).sum())
+        critical_behind = 0
+        if "is_critical_path" in activities.columns:
+            critical_behind = int((
+                activities[activities["is_critical_path"] == True]
+                ["variance_pct"].fillna(0) < -0.05
+            ).sum())
+        avg_variance = activities["variance_pct"].fillna(0).mean()
+        max_slip     = int(activities["weeks_slip"].fillna(0).max())
+
+        g1,g2,g3,g4,g5,g6 = st.columns(6)
+        g1.metric("Total Activities",  total_acts)
+        g2.metric("Complete",          complete,
+                  delta="✅ Done")
+        g3.metric("Behind Plan",       behind,
+                  delta="Needs attention",
+                  delta_color="inverse")
+        g4.metric("Ahead of Plan",     ahead,
+                  delta="Positive ✅",
+                  delta_color="normal")
+        g5.metric("Critical Risk",     critical_behind,
+                  delta="HIGH" if critical_behind > 0 else "Clear",
+                  delta_color="inverse" if critical_behind > 0 else "normal")
+        g6.metric("Max Weeks Slip",    f"{max_slip} wks",
+                  delta_color="inverse" if max_slip > 0 else "normal")
+
+    st.divider()
+
+    # Quick navigation cards
+    st.markdown("### 🚀 Navigate to")
+    n1, n2, n3 = st.columns(3)
+    n4, n5, n6 = st.columns(3)
+
+    nav_cards = [
+        (n1, "📋", "Intelligence Report",  "Risks, flags, activity status"),
+        (n2, "📝", "Generate MOM",         "Phase-wise minutes of meeting"),
+        (n3, "📊", "Generate PPT",         "Custom presentation builder"),
+        (n4, "📈", "Generate Graphs",      "S-Curve, variance, critical path"),
+        (n5, "🔄", "Recovery Simulator",   "Catch-up scenario planning"),
+        (n6, "⚠️", "Early Warning",        "Predict next week risks"),
+    ]
+    for col, icon, title, desc in nav_cards:
+        with col:
+            st.markdown(f"""
+            <div style="background:linear-gradient(135deg,#1E2761,#2A3580);
+                        border-radius:10px;padding:16px;text-align:center;
+                        border-bottom:3px solid #E87722;
+                        box-shadow:0 4px 12px rgba(30,39,97,0.2);
+                        margin-bottom:8px;">
+                <div style="font-size:1.8rem;">{icon}</div>
+                <div style="color:#FFFFFF;font-weight:700;font-size:0.9rem;
+                            margin:6px 0 4px 0;">{title}</div>
+                <div style="color:#A8C8F0;font-size:0.75rem;">{desc}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.divider()
+
+    # Site photos
+    st.markdown("### 📸 Site Photos")
+    photo_tab1, photo_tab2 = st.tabs(
+        ["📷 Upload Site Photos", "🖼 Representative Photos"])
+    with photo_tab1:
+        st.caption("Upload actual site photos — displayed by phase.")
+        up1,up2 = st.columns(2)
+        uploaded_p1 = up1.file_uploader(
+            "Phase I", type=["jpg","jpeg","png"], key="lp_p1")
+        uploaded_p2 = up2.file_uploader(
+            "Phase II", type=["jpg","jpeg","png"], key="lp_p2")
+        up3,up4 = st.columns(2)
+        uploaded_p3 = up3.file_uploader(
+            "Phase III", type=["jpg","jpeg","png"], key="lp_p3")
+        uploaded_p4 = up4.file_uploader(
+            "Site/General", type=["jpg","jpeg","png"], key="lp_p4")
+        uploaded = [uploaded_p1,uploaded_p2,uploaded_p3,uploaded_p4]
+        captions  = ["Phase I","Phase II","Phase III","Site"]
+        if any(uploaded):
+            ucols = st.columns(4)
+            for i,(up,cap) in enumerate(zip(uploaded,captions)):
+                if up:
+                    ucols[i].image(up, caption=cap, use_column_width=True)
+    with photo_tab2:
+        st.caption(
+            "Representative construction photos. "
+            "Site engineer uploads actual photos via Upload tab.")
+        p1,p2,p3,p4 = st.columns(4)
+        for i,photo in enumerate(SITE_PHOTOS):
+            [p1,p2,p3,p4][i].image(
+                photo["url"],
+                caption=photo["caption"],
+                use_column_width=True)
 
 
 # ════════════════════════════════════════════════════════════════
 # SECTION: INTELLIGENCE REPORT
 # ════════════════════════════════════════════════════════════════
-if nav == "📋 Intelligence Report":
+elif nav == "📋 Intelligence Report":
 
     # ── Top Risks ─────────────────────────────────────────────
     st.markdown("### 🚨 Top Risks This Week")
@@ -625,15 +854,22 @@ if nav == "📋 Intelligence Report":
     st.markdown("### 📋 Executive Summary")
     if narrative:
         exec_sum = narrative.get("executive_summary", "") or ""
-        # If executive_summary contains full JSON, parse it
-        if exec_sum.strip().startswith("{"):
+        exec_sum = exec_sum.strip()
+        if "```" in exec_sum:
+            exec_sum = exec_sum.split("```")[1]
+            if exec_sum.startswith("json"):
+                exec_sum = exec_sum[4:]
+            exec_sum = exec_sum.strip()
+        if exec_sum.startswith("{"):
             try:
                 parsed = json.loads(exec_sum)
                 exec_sum = parsed.get("executive_summary", exec_sum)
+                if not isinstance(exec_sum, str):
+                    exec_sum = str(exec_sum)
             except Exception:
                 pass
+        exec_sum = exec_sum.strip('"').strip("'").strip()
         if exec_sum:
-            st.info(exec_sum)
 
         # Trend commentary
         if not history_df.empty:
@@ -798,6 +1034,7 @@ if nav == "📋 Intelligence Report":
         disp = disp[show_cols].copy()
         for pct_col in ["cum_actual_pct","cum_planned_pct","variance_pct"]:
             if pct_col in disp.columns:
+                disp[pct_col] = disp[pct_col].fillna(0)
                 disp[pct_col] = (disp[pct_col]*100).round(1).astype(str)+"%"
         if "is_critical_path" in disp.columns:
             disp["is_critical_path"] = disp["is_critical_path"].map(
