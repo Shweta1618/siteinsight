@@ -189,6 +189,8 @@ ACTIVITIES BEHIND PLAN ({len(behind_acts)}):
 Produce a JSON response with exactly these keys:
 {
   "executive_summary": "Write a polished senior management summary in 3 concise sentences. Sentence 1: overall project health this week (improving / stable / under pressure / deteriorating) using actual schedule context. Sentence 2: highlight the most critical high-risk flagged activities, affected phases, delays, percentages or activity counts, and why management attention is required. Sentence 3: mention positive progress areas, recovery opportunities, and next-week outlook. Make each week's summary specific, data-driven, and different from previous weeks.",
+  "key_risks": ["Risk 1 — specific activity, phase, and impact", "Risk 2", "Risk 3"],
+  "recommendations": ["Action 1 — specific, who does what", "Action 2", "Action 3"]
 }
 
 Rules:
@@ -200,8 +202,9 @@ Rules:
 - Balance risks with progress achieved
 - No robotic wording
 - No bullet points inside executive_summary
-- Maximum 95 words
-- Return ONLY JSON object
+- Maximum 95 words for executive_summary
+- key_risks and recommendations must be JSON arrays of strings — 3 items each
+- Return ONLY the JSON object, no preamble, no markdown fences
 """
     return prompt
 
@@ -244,13 +247,31 @@ def call_groq(prompt: str) -> dict:
             "recommendations": ""
         }
 
-    # force clean strings
-    for key in ["executive_summary", "key_risks", "recommendations"]:
-        val = parsed.get(key, "")
-        if isinstance(val, list):
-            val = "\n".join([str(x) for x in val])
+    # Clean executive_summary
+    exec_sum = parsed.get("executive_summary", "") or ""
+    parsed["executive_summary"] = str(exec_sum).strip().strip('"').strip("'")
 
-        parsed[key] = str(val).strip().strip('"').strip("'")
+    # Clean key_risks and recommendations properly
+    for field in ("key_risks", "recommendations"):
+        val = parsed.get(field)
+        if isinstance(val, list):
+            parsed[field] = "\n".join(
+                [f"• {item.lstrip('*• ').strip()}" for item in val if item]
+            )
+        elif isinstance(val, str):
+            val = val.strip()
+            try:
+                parsed_list = json.loads(val)
+                if isinstance(parsed_list, list):
+                    parsed[field] = "\n".join(
+                        [f"• {i.lstrip('*• ').strip()}" for i in parsed_list if i]
+                    )
+                else:
+                    parsed[field] = val if val else None
+            except Exception:
+                parsed[field] = val if val else None
+        else:
+            parsed[field] = None
 
     return {
         "parsed": parsed,
