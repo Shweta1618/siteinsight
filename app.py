@@ -526,6 +526,9 @@ narrative  = load_narrative(selected_week)
 dq_flags   = load_dq_flags(selected_week)
 history_df = load_all_history()
 
+# Filtered history — only up to selected week (for graphs)
+graph_df = history_df[history_df["week_number"] <= selected_week] if not history_df.empty else history_df
+
 # Risk engine
 risk_list = []
 if not activities.empty and not history_df.empty:
@@ -1624,10 +1627,10 @@ Rules:
 
             # ── Build graphs for embedding ────────────────────
             graph_images = {}
-            if graph_selected and not history_df.empty:
+            if graph_selected and not graph_df.empty:
                 with st.spinner("Generating graphs for embedding..."):
                     if ppt_g_scurve:
-                        scurve = history_df.groupby("week_number").agg(
+                        scurve = graph_df.groupby("week_number").agg(
                             actual=("cum_actual_pct","mean"),
                             planned=("cum_planned_pct","mean")
                         ).reset_index()
@@ -1653,7 +1656,7 @@ Rules:
                         plt.close(fig)
 
                     if ppt_g_variance:
-                        trend = (history_df.groupby("week_number")["variance_pct"]
+                        trend = (graph_df.groupby("week_number")["variance_pct"]
                                  .mean().reset_index())
                         trend["variance_pct"] *= 100
                         fig, ax = plt.subplots(figsize=(8,3.5))
@@ -1923,9 +1926,9 @@ elif nav == "📈 Generate Graphs":
         st.divider()
 
         # 0 · S-Curve
-        if g_scurve and not history_df.empty:
+        if g_scurve and not graph_df.empty:
             st.markdown("#### S-Curve — Planned vs Actual Progress")
-            scurve = history_df.groupby("week_number").agg(
+            scurve = graph_df.groupby("week_number").agg(
                 actual=("cum_actual_pct","mean"),
                 planned=("cum_planned_pct","mean")
             ).reset_index()
@@ -1964,9 +1967,9 @@ elif nav == "📈 Generate Graphs":
             plt.close(fig); st.divider()
 
         # 1 · Variance trend
-        if g_variance and not history_df.empty:
+        if g_variance and not graph_df.empty:
             st.markdown("#### Variance trend — all weeks")
-            trend = (history_df.groupby("week_number")["variance_pct"]
+            trend = (graph_df.groupby("week_number")["variance_pct"]
                      .mean().reset_index())
             trend["variance_pct"] *= 100
             fig, ax = plt.subplots(figsize=(10,3.5))
@@ -2415,7 +2418,7 @@ elif nav == "⚠️ Early Warning":
             st.divider()
             st.markdown("#### Variance trend — at-risk activities")
             at_risk_ids = [w["act_id"] for w in warnings_list[:6]]
-            hist_subset = history_df[history_df["act_id"].isin(at_risk_ids)]
+            hist_subset = graph_df[graph_df["act_id"].isin(at_risk_ids)]
             if not hist_subset.empty:
                 fig, ax = plt.subplots(figsize=(10,4))
                 for aid in at_risk_ids:
