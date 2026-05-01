@@ -146,16 +146,31 @@ def parse_activities(ws, week_number: int) -> list[dict]:
         record = {"week_number": week_number}
         for excel_col, db_col in COL_MAP.items():
             val = row_dict.get(excel_col)
+            # Skip if val is None AND field already has a value
+            if val is None and record.get(db_col) is not None:
+                continue
             if db_col == "is_critical_path":
                 record[db_col] = str(val).strip().upper() == "Y" if val else False
             elif db_col in ("cum_actual_pct", "cum_planned_pct", "variance_pct"):
-                record[db_col] = float(val) if val is not None else None
+                if val is not None:
+                    record[db_col] = float(val)
+                elif db_col not in record:
+                    record[db_col] = None
             elif db_col == "weeks_slip":
-                record[db_col] = int(val) if val is not None else 0
+                if val is not None:
+                    record[db_col] = int(val)
+                elif db_col not in record:
+                    record[db_col] = 0
             elif db_col in ("total_scope", "this_wk_qty", "cum_actual_qty"):
-                record[db_col] = float(val) if val is not None else None
+                if val is not None:
+                    record[db_col] = float(val)
+                elif db_col not in record:
+                    record[db_col] = None
             else:
-                record[db_col] = str(val).strip() if val else None
+                if val is not None:
+                    record[db_col] = str(val).strip()
+                elif db_col not in record:
+                    record[db_col] = None
         records.append(record)
     return records
 
