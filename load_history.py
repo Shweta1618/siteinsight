@@ -28,43 +28,50 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ── Column map: Excel header → DB field ─────────────────────
 COL_MAP = {
-    "Act\nID":                        "act_id",
-    "Phase":                           "phase",
-    "Activity":                        "activity",
-    "Unit":                            "unit",
-    "Total\nScope":                   "total_scope",
-    # Old format (Wk01-15) — newline version
-    "This Wk\nQty":                   "this_wk_achieved_qty",
-    "Cum.\nActual Qty":               "cum_actual_qty",
-    "Cum.\nActual %":                 "cum_actual_pct",
-    "★ Cum.\nPlanned %":             "cum_planned_pct",
-    # New format (Wk16+) — space version (actual headers in Excel)
-    "This Wk\nPlanned\nQty":         "this_wk_planned_qty",
-    "This Wk\nAchieved\nQty":        "this_wk_achieved_qty",
-    "This Wk Planned Qty":            "this_wk_planned_qty",
-    "This Wk Achieved Qty":           "this_wk_achieved_qty",
-    "Cum. Actual %":                  "cum_actual_pct",
-    "★ Cum. Planned %":              "cum_planned_pct",
-    "Cum. Actual\n%":                 "cum_actual_pct",
-    "★ Cum. Planned\n%":             "cum_planned_pct",
-    "Cum.\nPlanned\n%":              "cum_planned_pct",
-    "Cum.\nActual\n%":               "cum_actual_pct",
-    "Cum. Actual Qty":                "cum_actual_qty",
-    # Common columns
-    "Variance\n(%)":                  "variance_pct",
-    "Variance (%)":                   "variance_pct",
-    "Wks\nSlip":                      "weeks_slip",
-    "Wks Slip":                       "weeks_slip",
-    "★ Delay\nReason":               "delay_reason",
-    "★ Delay Reason":                "delay_reason",
-    "Delay Reason":                   "delay_reason",
-    "Responsible Person":              "responsible_person",
-    "★ Critical\nPath":              "is_critical_path",
-    "★ Critical Path":               "is_critical_path",
-    "Critical Path":                  "is_critical_path",
-    "Baseline\nVersion":              "baseline_version",
-    "Baseline Version":               "baseline_version",
-    "Remarks / Next Week Plan":        "remarks",
+    "Act\nID": "act_id",
+    "Phase": "phase",
+    "Activity": "activity",
+    "Unit": "unit",
+    "Total\nScope": "total_scope",
+
+    # =========================
+    # THIS WEEK QTY
+    # =========================
+    "This Wk\nQty": "this_wk_achieved_qty",  # old
+    "This Wk\nAchieved\nQty": "this_wk_achieved_qty",  # new
+    "This Wk\nPlanned\nQty": "this_wk_planned_qty",
+
+    # =========================
+    # CUM ACTUAL QTY
+    # =========================
+    "Cum.\nActual Qty": "cum_actual_qty",
+
+    # =========================
+    # CUM ACTUAL %
+    # =========================
+    "Cum.\nActual %": "cum_actual_pct",          # old
+    "Cum. Actual %": "cum_actual_pct",          # new (space)
+    "Cum. Actual\n%": "cum_actual_pct",         # new (line break)
+    "Cum.\nActual\n%": "cum_actual_pct",        # variant
+
+    # =========================
+    # CUM PLANNED %
+    # =========================
+    "★ Cum.\nPlanned %": "cum_planned_pct",     # old
+    "★ Cum. Planned %": "cum_planned_pct",     # new (space)
+    "★ Cum. Planned\n%": "cum_planned_pct",    # new (line break)
+    "Cum.\nPlanned\n%": "cum_planned_pct",     # fallback (no star)
+
+    # =========================
+    # OTHER COMMON
+    # =========================
+    "Variance\n(%)": "variance_pct",
+    "Wks\nSlip": "weeks_slip",
+    "★ Delay\nReason": "delay_reason",
+    "Responsible Person": "responsible_person",
+    "★ Critical\nPath": "is_critical_path",
+    "Baseline\nVersion": "baseline_version",
+    "Remarks / Next Week Plan": "remarks",
 }
 
 
@@ -125,7 +132,8 @@ def parse_activities(ws, week_number: int) -> list[dict]:
     rows = list(ws.iter_rows(min_row=5, values_only=True))
 
     # Row 5 is the column header
-    raw_headers = [str(h).strip() if h else "" for h in rows[0]]
+    raw_headers = [str(h).strip().replace("\r\n", "\n").replace("\r", "\n") if h else "" for h in rows[0]]
+    print(f"DEBUG headers: {raw_headers}")
 
     records = []
     for raw_row in rows[1:]:
