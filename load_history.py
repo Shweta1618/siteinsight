@@ -130,13 +130,14 @@ def parse_header(ws) -> dict:
 def parse_activities(ws, week_number: int) -> list[dict]:
     """Read activity rows (row 7 onward). Skip phase-header rows."""
     rows = list(ws.iter_rows(min_row=5, values_only=True))
+# Skip blank rows after header
 
     # Row 5 is the column header
     raw_headers = [str(h).strip().replace("\r\n", "\n").replace("\r", "\n") if h else "" for h in rows[0]]
     print(f"DEBUG headers: {raw_headers}")
 
     records = []
-    for raw_row in rows[1:]:
+    for raw_row in rows[2:]:
         act_id = raw_row[0]
         if not act_id or str(act_id).startswith("  "):
             continue  # phase header row, skip
