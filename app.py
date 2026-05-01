@@ -1098,13 +1098,9 @@ elif nav == "📝 Generate MOM":
 
     with st.form("mom_form"):
         mc1, mc2 = st.columns(2)
-        wpr_date = date.today()
-        if header.get("report_date"):
-            try:
-                wpr_date = datetime.strptime(
-                    str(header["report_date"]), "%Y-%m-%d").date()
-            except Exception:
-                wpr_date = date.today()
+        wpr_date = PROJECT_START + pd.Timedelta(weeks=selected_week - 1)
+        if hasattr(wpr_date, 'date'):
+            wpr_date = wpr_date.date()
         meeting_date = mc1.date_input("Meeting date", value=wpr_date)
         meeting_chairperson = mc2.text_input("Chaired by", value="Project Manager")
 

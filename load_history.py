@@ -88,13 +88,16 @@ def parse_header(ws) -> dict:
     week_label   = next((p for p in parts if p.startswith("Week")), None)
     week_number  = int(re.search(r"\d+", week_label).group()) if week_label else None
 
-    raw_date = next((p.strip() for p in parts if re.search(r"\d{2}\s\w+\-\d{4}", p)), None)
+    raw_date = next((p.strip() for p in parts if re.search(r"\d{2}[\s\-]\w+[\s\-]\d{4}", p)), None)
     report_date = None
     if raw_date:
-        try:
-            report_date = datetime.strptime(raw_date, "%d %b-%Y").date()
-        except ValueError:
-            pass
+        for fmt in ("%d %b-%Y", "%d-%b-%Y", "%d %b %Y", "%d-%b %Y",
+                    "%d %B-%Y", "%d-%B-%Y", "%d %B %Y"):
+            try:
+                report_date = datetime.strptime(raw_date.strip(), fmt).date()
+                break
+            except ValueError:
+                continue
 
     baseline_version = None
     bl_part = next((p for p in parts if "Baseline:" in p), None)
@@ -146,31 +149,16 @@ def parse_activities(ws, week_number: int) -> list[dict]:
         record = {"week_number": week_number}
         for excel_col, db_col in COL_MAP.items():
             val = row_dict.get(excel_col)
-            # Skip if val is None AND field already has a value
-            if val is None and record.get(db_col) is not None:
-                continue
             if db_col == "is_critical_path":
                 record[db_col] = str(val).strip().upper() == "Y" if val else False
             elif db_col in ("cum_actual_pct", "cum_planned_pct", "variance_pct"):
-                if val is not None:
-                    record[db_col] = float(val)
-                elif db_col not in record:
-                    record[db_col] = None
+                record[db_col] = float(val) if val is not None else None
             elif db_col == "weeks_slip":
-                if val is not None:
-                    record[db_col] = int(val)
-                elif db_col not in record:
-                    record[db_col] = 0
+                record[db_col] = int(val) if val is not None else 0
             elif db_col in ("total_scope", "this_wk_qty", "cum_actual_qty"):
-                if val is not None:
-                    record[db_col] = float(val)
-                elif db_col not in record:
-                    record[db_col] = None
+                record[db_col] = float(val) if val is not None else None
             else:
-                if val is not None:
-                    record[db_col] = str(val).strip()
-                elif db_col not in record:
-                    record[db_col] = None
+                record[db_col] = str(val).strip() if val else None
         records.append(record)
     return records
 
